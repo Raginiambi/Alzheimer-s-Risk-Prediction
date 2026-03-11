@@ -1,0 +1,21 @@
+# Ignore confidential dataset
+data/
+
+# Ignore uploaded audio files
+Backend/uploads/
+
+# Ignore trained models (optional)
+Backend/model/*.pkl
+
+Backend/transcription/__pycache__
+
+# Python cache files
+utils/__pycache__/
+*.pyc
+__pycache__/
+
+# Node modules
+frontend/node_modules/
+
+model_training/alzheimer_model.pkl
+model_training/features/
