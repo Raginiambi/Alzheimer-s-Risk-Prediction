@@ -1,17 +1,24 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/analyze";
+const API_URL = "http://127.0.0.1:5000/analyze";
 
 export const sendAudio = async (audioBlob) => {
 
   const formData = new FormData();
-  formData.append("audio", audioBlob, "answer.wav");
+  formData.append("audio", audioBlob, "audio.webm");
 
-  const response = await axios.post(API_URL, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  try {
 
-  return response.data;
+    const response = await axios.post(API_URL, formData);
+
+    return response.data;
+
+  } catch (error) {
+
+    if (error.response && error.response.data.error) {
+      return { error: error.response.data.error };
+    }
+
+    return { error: "Something went wrong. Please try again." };
+  }
 };

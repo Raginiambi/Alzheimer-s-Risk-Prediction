@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { sendAudio } from "../services/api.js";
 
-function Recorder({onResult}) {
+function Recorder({ onResult }) {
 
   const [recording, setRecording] = useState(false);
   const mediaRecorderRef = useRef(null);
@@ -9,9 +9,11 @@ function Recorder({onResult}) {
 
   const startRecording = async () => {
 
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-    const recorder = new MediaRecorder(stream);
+    const recorder = new MediaRecorder(stream, {
+      mimeType: "audio/webm"
+    });
 
     recorder.ondataavailable = (event) => {
       audioChunks.current.push(event.data);
@@ -22,35 +24,39 @@ function Recorder({onResult}) {
     mediaRecorderRef.current = recorder;
     setRecording(true);
   };
+const stopRecording = () => {
 
-  const stopRecording = async () => {
+  mediaRecorderRef.current.stop();
+  setRecording(false);
 
-    mediaRecorderRef.current.stop();
-    setRecording(false);
+  mediaRecorderRef.current.onstop = () => {
 
-    mediaRecorderRef.current.onstop = async () => {
+    const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
 
-      const audioBlob = new Blob(audioChunks.current, {type:"audio/wav"});
-      audioChunks.current = [];
+    audioChunks.current = [];
 
-      const result = await sendAudio(audioBlob);
+    if (!audioBlob || audioBlob.size === 0) {
+      alert("Recording failed. Please try again.");
+      return;
+    }
 
-      onResult(result);
-    };
+    console.log("Blob:", audioBlob);
+
+    // 🔥 send ONLY blob
+    onResult(audioBlob);
   };
-
+};
   return (
-
-    <div style={{marginTop:"40px"}}>
+    <div style={{ marginTop: "40px" }}>
 
       {!recording && (
-        <button onClick={startRecording} style={{padding:"15px 25px"}}>
+        <button onClick={startRecording} style={{ padding: "15px 25px" }}>
           Start Recording
         </button>
       )}
 
       {recording && (
-        <button onClick={stopRecording} style={{padding:"15px 25px"}}>
+        <button onClick={stopRecording} style={{ padding: "15px 25px" }}>
           Stop Recording
         </button>
       )}

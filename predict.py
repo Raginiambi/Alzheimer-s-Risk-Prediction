@@ -21,7 +21,8 @@ columns = [
     "lexical_diversity",
     "repetition_rate",
     "filler_count",
-    "avg_sentence_length"
+    "avg_sentence_length",
+    "pause_count"
 ]
 
 features_df = pd.DataFrame([features], columns=columns)
