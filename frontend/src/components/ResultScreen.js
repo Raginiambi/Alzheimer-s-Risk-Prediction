@@ -1,12 +1,16 @@
 import Visualization from "./Visualization";
 
-function ResultScreen({results}) {
+function ResultScreen({ result }) {
 
-  if (!results || results.length === 0) {
-  return <p>Processing results...</p>;
+//   if (!results || results.length === 0) {
+//   return <p>Processing results...</p>;
+// 
+
+console.log("Result RECEIVED: ", result);
+if(!result){
+  return <p> No result found</p>
 }
 
-const finalPrediction = results[results.length - 1];
 
   return (
     <div style={{textAlign:"center", marginTop:"60px"}}>
@@ -14,22 +18,26 @@ const finalPrediction = results[results.length - 1];
       <h2>Screening Result</h2>
 
       <h3>
-        Prediction: {finalPrediction.prediction}
+        Prediction: {result.prediction}
       </h3>
 
       <p>
-        Confidence: {finalPrediction.confidence.toFixed(2)}%
+        Confidence: {result.confidence.toFixed(2)}%
       </p>
 
-      <div style={{marginTop:"40px"}}>
-        <h3>Transcript</h3>
+    <div style={{ marginTop: "40px" }}>
+        <h3>Extracted Features</h3>
 
-        {results.map((r,index)=>(
-          <p key={index}>{r.transcript}</p>
-        ))}
+        {result.features &&
+          Object.entries(result.features).map(([key, value]) => (
+            <p key={key}>
+              {key}: {value}
+            </p>
+          ))}
       </div>
 
-      <Visualization features={finalPrediction.features} />
+
+      <Visualization features={result.features} />
 
     </div>
   );

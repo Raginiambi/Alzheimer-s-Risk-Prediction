@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
+from imblearn.over_sampling import SMOTE
 import joblib
 
 # Load dataset
@@ -18,10 +19,16 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
+smote = SMOTE(random_state=42)
+X_train, y_train = smote.fit_resample(X_train, y_train)
+
+
 # Train model
 model = RandomForestClassifier(
-    n_estimators=100,
-    class_weight="balanced"
+    n_estimators=200,
+    max_depth=10,
+    class_weight="balanced",
+    random_state=42
 )
 
 model.fit(X_train, y_train)

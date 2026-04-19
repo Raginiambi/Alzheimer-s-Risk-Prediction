@@ -60,6 +60,7 @@ import Header from "./components/Header";
 import StartScreen from "./components/StartScreen";
 import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
+import axios from "axios";
 
 import questions from "./questions";
 
@@ -106,13 +107,21 @@ const handleAnswer = async (audioBlob) => {
     console.log("Final Transcript:", combinedText);
 
     // 🔥 CALL FINAL PREDICTION API
-    const finalRes = await axios.post(
+    try{
+      const finalRes = await axios.post(
       "http://127.0.0.1:5000/final_predict",
       { transcript: combinedText }
     );
-
+ console.log("Final API Response:", finalRes.data);
     setResult(finalRes.data);
     setCurrentQuestion(next);
+    }catch(error){
+      console.error(error);
+      alert("Error generating result");
+    }
+   
+
+    
   }
 };
   return (
@@ -130,10 +139,13 @@ const handleAnswer = async (audioBlob) => {
         />
       )}
 
-      {started && currentQuestion >= questions.length && result && (
-        <ResultScreen result={result} />
-      )}
-
+      {started && currentQuestion >= questions.length && (
+  result ? (
+    <ResultScreen result={result} />
+  ) : (
+    <h2>Processing results...</h2>
+  )
+)}
     </div>
   );
 }

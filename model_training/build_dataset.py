@@ -44,6 +44,8 @@ columns = [
     "filler_count",
     "avg_sentence_length",
     "pause_count",
+    "short_word_ratio",
+    "punctuation_count",
     "label"
 ]
 

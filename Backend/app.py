@@ -31,9 +31,11 @@ columns = [
     "repetition_rate",
     "filler_count",
     "avg_sentence_length",
-    "pause_count"
+    "pause_count",
+    "short_word_ratio",
+    "punctuation_count",
+    "label"
 ]
-
 
 def has_repetition(text):
     words = text.split()
@@ -147,7 +149,11 @@ def final_predict():
 
     confidence = float(max(prob) * 100)
 
-    label = "No Risk" if prediction == 0 else "Alzheimer Risk"
+    if confidence < 65:
+        label = "Uncertain"
+    else:
+        label = "No Risk" if prob[0] > prob[1] else "Alzheimer Risk"
+    
 
     return jsonify({
         "prediction": label,
