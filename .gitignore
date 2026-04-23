@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# React / Frontend
 
 # dependencies
 /node_modules
@@ -21,3 +21,25 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Backend / AI project
+
+# Ignore confidential dataset
+data/
+
+# Ignore uploaded audio files
+Backend/uploads/
+
+# Ignore trained models
+Backend/model/*.pkl
+model_training/alzheimer_model.pkl
+model_training/features/
+
+# Python cache files
+Backend/transcription/__pycache__
+utils/__pycache__/
+__pycache__/
+*.pyc
+
+# Node modules in frontend
+frontend/node_modules/
